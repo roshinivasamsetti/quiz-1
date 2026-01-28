@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart GK Quiz</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: radial-gradient(circle at top, #1e293b, #020617);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .quiz-box {
+        width: 450px;
+        background: rgba(117, 5, 99, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        text-align: center;
+        color: #fff;
+    }
+
+    h1 {
+        margin-bottom: 15px;
+        font-size: 28px;
+        letter-spacing: 1px;
+    }
+
+    #question {
+        font-size: 20px;
+        margin: 20px 0;
+    }
+
+    .option {
+        width: 100%;
+        padding: 14px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        cursor: pointer;
+        background: linear-gradient(90deg, #1e3c72, #2a5298);
+        color: #fff;
+        transition: transform 0.2s, background 0.3s;
+    }
+
+    .option:hover {
+        transform: scale(1.03);
+        background: linear-gradient(135deg, #f7971e, #ffd200);
+        color: #000;
+    }
+
+    #nextBtn {
+        margin-top: 18px;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        cursor: pointer;
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+        color: #000;
+        display: none;
+    }
+
+    #nextBtn:hover {
+        opacity: 0.9;
+    }
+
+    .score {
+        margin-top: 20px;
+        font-size: 22px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="quiz-box">
+    <h1>Quiz ✨</h1>
+    <div id="question"></div>
+
+    <button class="option" onclick="checkAnswer(0)" id="opt0"></button>
+    <button class="option" onclick="checkAnswer(1)" id="opt1"></button>
+    <button class="option" onclick="checkAnswer(2)" id="opt2"></button>
+    <button class="option" onclick="checkAnswer(3)" id="opt3"></button>
+
+    <button id="nextBtn" onclick="nextQuestion()">Next ➜</button>
+    <div class="score" id="score"></div>
+</div>
+
+<script>
+const questions = [
+    {
+    q: "What is the national animal of India?",
+    options: ["Lion", "Elephant", "Tiger", "Leopard"],
+    answer: 2
+},
+{
+    q: "Which planet is the largest in our solar system?",
+    options: ["Earth", "Mars", "Jupiter", "Saturn"],
+    answer: 2
+},
+{
+    q: "Who wrote the national anthem of India?",
+    options: ["Bankim Chandra Chatterjee", "Rabindranath Tagore", "Sarojini Naidu", "Subhash Bose"],
+    answer: 1
+},
+{
+    q: "Which vitamin is obtained from sunlight?",
+    options: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"],
+    answer: 3
+},
+{
+    q: "Which is the fastest land animal?",
+    options: ["Lion", "Horse", "Cheetah", "Leopard"],
+    answer: 2
+}
+
+];
+
+let current = 0;
+let score = 0;
+
+function loadQuestion() {
+    const q = questions[current];
+    document.getElementById("question").innerText = q.q;
+
+    for (let i = 0; i < 4; i++) {
+        const btn = document.getElementById("opt" + i);
+        btn.innerText = q.options[i];
+        btn.disabled = false;
+        btn.style.background = "linear-gradient(135deg, #00c6ff, #0072ff)";
+    }
+    document.getElementById("nextBtn").style.display = "none";
+}
+
+function checkAnswer(selected) {
+    const correct = questions[current].answer;
+
+    if (selected === correct) {
+        score++;
+        document.getElementById("opt" + selected).style.background = "#28a745";
+    } else {
+        document.getElementById("opt" + selected).style.background = "#dc3545";
+        document.getElementById("opt" + correct).style.background = "#28a745";
+    }
+
+    for (let i = 0; i < 4; i++) {
+        document.getElementById("opt" + i).disabled = true;
+    }
+
+    document.getElementById("nextBtn").style.display = "block";
+}
+
+function nextQuestion() {
+    current++;
+    if (current < questions.length) {
+        loadQuestion();
+    } else {
+        document.querySelector(".quiz-box").innerHTML = `
+            <h1>Finished 🎊</h1>
+            <div class="score">Score: ${score} / ${questions.length}</div>
+        `;
+    }
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
